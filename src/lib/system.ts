@@ -31,10 +31,8 @@ function bytesToGB(bytes: number) {
 }
 
 export async function getSystemDetails() {
-  // Get CPU usage
   const cpuUsage = getCpuUsage();
 
-  // Get memory info
   const totalMem = os.totalmem();
   const freeMem = os.freemem();
   const usedMem = totalMem - freeMem;
@@ -42,7 +40,7 @@ export async function getSystemDetails() {
   const cpuTemp = await getCpuTemp();
 
   return {
-    os,
+    platform: os.platform(),
     cpuTemp,
     cpuUsage,
     memoryUsage: {

@@ -52,10 +52,21 @@ ssh $PI_HOST <<EOF
   export NVM_DIR="\$HOME/.nvm"
   [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh" # Load NVM
   [ -s "\$NVM_DIR/bash_completion" ] && \. "\$NVM_DIR/bash_completion" # Load NVM bash_completion
+
+  # Ensure PM2 is set up for auto-start
+  pm2 startup systemd -u \$USER --hp \$HOME || true
+
+  # Navigate to the app directory
   cd $PI_APP_DIR
+
+  # Install production dependencies
   npm install --production
-  pm2 delete home-automation-app-app || true
+
+  # Restart the app with PM2
+  pm2 delete home-automation-app || true
   pm2 start npm --name "home-automation-app" -- start
+
+  # Save PM2 process list
   pm2 save
 EOF
 
